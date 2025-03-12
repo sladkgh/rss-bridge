@@ -1,0 +1,32 @@
+name: RSS-Bridge
+
+on:
+  schedule:
+    - cron: '0 * * * *' # 매시간 실행
+  workflow_dispatch:
+
+jobs:
+  rss_bridge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Install dependencies
+        run: |
+          composer install
+
+      - name: Run RSS-Bridge
+        run: |
+          php index.php?action=display&bridge=Instagram&u=instagram_account&media_type=all&format=Atom
+
+      - name: Upload RSS Feed
+        uses: actions/upload-artifact@v4
+        with:
+          name: rss_feed
+          path: ./index.php?action=display&bridge=Instagram&u=instagram_account&media_type=all&format=Atom
