@@ -35,10 +35,10 @@ jobs:
 
       - name: Generate RSS URL
         run: |
-          echo "<a href='https://raw.githubusercontent.com/${{ github.repository }}/actions/artifacts/rss_feed/instagram_rss.xml'>RSS Feed</a>" > rss_link.html
+          echo "RSS Feed URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > rss_link.txt
 
       - name: Upload RSS URL
         uses: actions/upload-artifact@v4
         with:
           name: rss_link
-          path: rss_link.html
+          path: rss_link.txt
