@@ -24,7 +24,7 @@ jobs:
       - name: Run RSS-Bridge
         run: |
           docker run --rm rssbridge/rss-bridge:latest \
-            /?action=display&bridge=Instagram&u=sunaedong_buffet&media_type=all&format=Atom \
+            /?action=display&bridge=Instagram&u=@sunaedong_buffet&media_type=all&format=Atom \
             > instagram_rss.xml
 
       - name: Upload RSS Feed
