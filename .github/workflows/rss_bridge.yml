@@ -12,6 +12,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Pull Latest RSS-Bridge
+        run: |
+          docker pull rssbridge/rss-bridge:latest
+
       - name: Create RSS-Bridge Config
         run: |
           cat <<EOF > config.ini.php
@@ -22,7 +26,7 @@ jobs:
       - name: Run RSS-Bridge
         run: |
           docker run --rm -v "$(pwd)/config.ini.php:/app/config.ini.php" \
-            rssbridge/rss-bridge:2024-02-01 \
+            rssbridge/rss-bridge:latest \
             "/?action=display&bridge=Instagram&u=sunaedong_buffet&media_type=all&format=Atom" \
             > instagram_rss.xml
 
