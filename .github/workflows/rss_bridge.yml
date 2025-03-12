@@ -12,19 +12,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-
-      - name: Install dependencies
+      - name: Create RSS-Bridge Config
         run: |
-          composer install
+          cat <<EOF > config.ini.php
+          [system]
+          whitelist_enabled = false
+          EOF
 
       - name: Run RSS-Bridge
         run: |
-          docker run --rm rssbridge/rss-bridge:latest \
-            /?action=display&bridge=Instagram&u=@sunaedong_buffet&media_type=all&format=Atom \
+          docker run --rm -v "$(pwd)/config.ini.php:/app/config.ini.php" \
+            rssbridge/rss-bridge:2024-02-01 \
+            "/?action=display&bridge=Instagram&u=sunaedong_buffet&media_type=all&format=Atom" \
             > instagram_rss.xml
 
       - name: Upload RSS Feed
@@ -32,13 +31,3 @@ jobs:
         with:
           name: instagram_rss
           path: instagram_rss.xml
-
-      - name: Generate RSS URL
-        run: |
-          echo "RSS Feed URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" > rss_link.txt
-
-      - name: Upload RSS URL
-        uses: actions/upload-artifact@v4
-        with:
-          name: rss_link
-          path: rss_link.txt
