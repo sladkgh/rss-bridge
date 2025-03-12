@@ -24,16 +24,21 @@ jobs:
       - name: Run RSS-Bridge
         run: |
           docker run --rm rssbridge/rss-bridge:latest \
-            "action=display&bridge=Instagram&u=sunaedong_buffet&media_type=all&format=Atom" \
+            /?action=display&bridge=Instagram&u=sunaedong_buffet&media_type=all&format=Atom \
             > instagram_rss.xml
+
+      - name: Upload RSS Feed
+        uses: actions/upload-artifact@v4
+        with:
+          name: instagram_rss
+          path: instagram_rss.xml
 
       - name: Generate RSS URL
         run: |
           echo "<a href='https://raw.githubusercontent.com/${{ github.repository }}/actions/artifacts/rss_feed/instagram_rss.xml'>RSS Feed</a>" > rss_link.html
-      
+
       - name: Upload RSS URL
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: rss_link
           path: rss_link.html
-
